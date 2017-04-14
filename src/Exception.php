@@ -1,3 +1,3 @@
-<?php namespace Bkwld\LaravelPug;
+<?php namespace Dts\LaravelPug;
 
 class Exception extends \Exception { }

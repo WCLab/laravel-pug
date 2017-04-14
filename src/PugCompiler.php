@@ -1,4 +1,4 @@
-<?php namespace Bkwld\LaravelPug;
+<?php namespace Dts\LaravelPug;
 
 // Dependencies
 use Illuminate\View\Compilers\Compiler;

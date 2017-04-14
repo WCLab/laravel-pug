@@ -1,4 +1,4 @@
-<?php namespace Bkwld\LaravelPug;
+<?php namespace Dts\LaravelPug;
 
 // Dependencies
 use Pug\Pug;
@@ -23,11 +23,8 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider {
 	 */
 	public function register() {
 
-		// Version specific registering
-		if ($this->version() == 5) $this->registerLaravel5();
-
 		// Determine the cache dir
-		$cache_dir = storage_path($this->version() == 5 ? '/framework/views' : '/views');
+		$cache_dir = storage_path('/views');
 
 		// Bind the package-configued Pug instance
 		$this->app->singleton('laravel-pug.pug', function($app) {
@@ -36,24 +33,15 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider {
 		});
 
 		// Bind the Pug compiler
-		$this->app->singleton('Bkwld\LaravelPug\PugCompiler', function($app) use ($cache_dir) {
+		$this->app->singleton('Dts\LaravelPug\PugCompiler', function($app) use ($cache_dir) {
 			return new PugCompiler($app['laravel-pug.pug'], $app['files'], $cache_dir);
 		});
 
 		// Bind the Pug Blade compiler
-		$this->app->singleton('Bkwld\LaravelPug\PugBladeCompiler', function($app) use ($cache_dir) {
+		$this->app->singleton('Dts\LaravelPug\PugBladeCompiler', function($app) use ($cache_dir) {
 			return new PugBladeCompiler($app['laravel-pug.pug'], $app['files'], $cache_dir);
 		});
 
-	}
-
-	/**
-	 * Register specific logic for Laravel 5. Merges package config with user config
-	 *
-	 * @return void
-	 */
-	public function registerLaravel5() {
-		$this->mergeConfigFrom(__DIR__.'/../config/config.php', 'laravel-pug');
 	}
 
 	/**
@@ -63,38 +51,15 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider {
 	 */
 	public function boot() {
 
-		// Version specific booting
-		switch($this->version()) {
-			case 4: $this->bootLaravel4(); break;
-			case 5: $this->bootLaravel5(); break;
-			default: throw new Exception('Unsupported Laravel version');
+		if ($this->version()==4) {
+			$this->package('dts/laravel-pug');
+		}else{
+			throw new Exception('Unsupported Laravel version');	
 		}
 
 		// Register compilers
 		$this->registerPugCompiler();
 		$this->registerPugBladeCompiler();
-	}
-
-	/**
-	 * Boot specific logic for Laravel 4. Tells Laravel about the package for auto
-	 * namespacing of config files
-	 *
-	 * @return void
-	 */
-	public function bootLaravel4() {
-		$this->package('bkwld/laravel-pug');
-	}
-
-	/**
-	 * Boot specific logic for Laravel 5. Registers the config file for publishing
-	 * to app directory
-	 *
-	 * @return void
-	 */
-	public function bootLaravel5() {
-		$this->publishes([
-			__DIR__.'/../config/config.php' => config_path('laravel-pug.php')
-		], 'laravel-pug');
 	}
 
 	/**
@@ -106,7 +71,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider {
 
 		// Add resolver
 		$this->app['view.engine.resolver']->register('pug', function() {
-			return new CompilerEngine($this->app['Bkwld\LaravelPug\PugCompiler']);
+			return new CompilerEngine($this->app['Dts\LaravelPug\PugCompiler']);
 		});
 
 		// Add extensions
@@ -125,7 +90,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider {
 
 		// Add resolver
 		$this->app['view.engine.resolver']->register('pug.blade', function() {
-			return new CompilerEngine($this->app['Bkwld\LaravelPug\PugBladeCompiler']);
+			return new CompilerEngine($this->app['Dts\LaravelPug\PugBladeCompiler']);
 		});
 
 		// Add extensions
@@ -141,8 +106,24 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider {
 	 * @return array
 	 */
 	public function getConfig() {
-		$key = $this->version() == 5 ? 'laravel-pug' : 'laravel-pug::config';
-		return $this->app->make('config')->get($key);
+		$loader = $this->app['config']->getLoader();
+
+		 // Get environment name
+		$env = $this->app['config']->getEnvironment();
+
+		// Add package namespace with path set, override package if app config exists in the main app directory
+		if (file_exists(app_path() . '/config/packages/dts/laravel-pug')) {
+			$loader->addNamespace('namespace', app_path() . '/config/packages/dts/laravel-pug');
+		} else {
+			$loader->addNamespace('namespace', __DIR__ . '/../../config');
+		}
+
+		$config = $loader->load($env, 'config', 'namespace');
+
+		// $this->app['config']->set('namespace::config', $config);
+
+		return $config;
+		
 	}
 
 
@@ -154,8 +135,8 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider {
 	 */
 	public function provides() {
 		return array(
-			'Bkwld\LaravelPug\PugCompiler',
-			'Bkwld\LaravelPug\PugBladeCompiler',
+			'Dts\LaravelPug\PugCompiler',
+			'Dts\LaravelPug\PugBladeCompiler',
 			'laravel-pug.pug',
 		);
 	}
