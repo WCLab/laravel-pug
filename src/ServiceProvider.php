@@ -1,4 +1,4 @@
-<?php namespace Dts\LaravelPug;
+<?php namespace Dorantes\LaravelPug;
 
 // Dependencies
 use Pug\Pug;
@@ -33,12 +33,12 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider {
 		});
 
 		// Bind the Pug compiler
-		$this->app->singleton('Dts\LaravelPug\PugCompiler', function($app) use ($cache_dir) {
+		$this->app->singleton('Dorantes\LaravelPug\PugCompiler', function($app) use ($cache_dir) {
 			return new PugCompiler($app['laravel-pug.pug'], $app['files'], $cache_dir);
 		});
 
 		// Bind the Pug Blade compiler
-		$this->app->singleton('Dts\LaravelPug\PugBladeCompiler', function($app) use ($cache_dir) {
+		$this->app->singleton('Dorantes\LaravelPug\PugBladeCompiler', function($app) use ($cache_dir) {
 			return new PugBladeCompiler($app['laravel-pug.pug'], $app['files'], $cache_dir);
 		});
 
@@ -52,7 +52,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider {
 	public function boot() {
 
 		if ($this->version()==4) {
-			$this->package('dts/laravel-pug');
+			$this->package('dorantes/laravel-pug');
 		}else{
 			throw new Exception('Unsupported Laravel version');	
 		}
@@ -71,7 +71,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider {
 
 		// Add resolver
 		$this->app['view.engine.resolver']->register('pug', function() {
-			return new CompilerEngine($this->app['Dts\LaravelPug\PugCompiler']);
+			return new CompilerEngine($this->app['Dorantes\LaravelPug\PugCompiler']);
 		});
 
 		// Add extensions
@@ -90,7 +90,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider {
 
 		// Add resolver
 		$this->app['view.engine.resolver']->register('pug.blade', function() {
-			return new CompilerEngine($this->app['Dts\LaravelPug\PugBladeCompiler']);
+			return new CompilerEngine($this->app['Dorantes\LaravelPug\PugBladeCompiler']);
 		});
 
 		// Add extensions
@@ -112,8 +112,8 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider {
 		$env = $this->app['config']->getEnvironment();
 
 		// Add package namespace with path set, override package if app config exists in the main app directory
-		if (file_exists(app_path() . '/config/packages/dts/laravel-pug')) {
-			$loader->addNamespace('namespace', app_path() . '/config/packages/dts/laravel-pug');
+		if (file_exists(app_path() . '/config/packages/dorantes/laravel-pug')) {
+			$loader->addNamespace('namespace', app_path() . '/config/packages/dorantes/laravel-pug');
 		} else {
 			$loader->addNamespace('namespace', __DIR__ . '/../../config');
 		}
@@ -135,8 +135,8 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider {
 	 */
 	public function provides() {
 		return array(
-			'Dts\LaravelPug\PugCompiler',
-			'Dts\LaravelPug\PugBladeCompiler',
+			'Dorantes\LaravelPug\PugCompiler',
+			'Dorantes\LaravelPug\PugBladeCompiler',
 			'laravel-pug.pug',
 		);
 	}

@@ -1,4 +1,4 @@
-<?php namespace Dts\LaravelPug;
+<?php namespace Dorantes\LaravelPug;
 
 // Dependencies
 use Illuminate\View\Compilers\BladeCompiler;

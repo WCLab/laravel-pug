@@ -1,9 +1,9 @@
 {
-    "name": "dts/laravel-pug",
+    "name": "dorantes/laravel-pug",
     "description": "Pug view adapter for Laravel 4",
     "type": "library",
     "require": {
-        "php": ">=5.4.0",
+        "php": ">=5.3.3",
         "illuminate/support": "4 - 5",
         "illuminate/view": "4 - 5",
         "pug-php/pug": "1 - 2"
