@@ -1,6 +1,6 @@
 {
-    "name": "bkwld/laravel-pug",
-    "description": "Pug view adapter for Laravel",
+    "name": "dts/laravel-pug",
+    "description": "Pug view adapter for Laravel 4",
     "type": "library",
     "require": {
         "php": ">=5.4.0",
@@ -10,7 +10,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Bkwld\\LaravelPug\\": "src/"
+            "Dts\\LaravelPug\\": "src/"
         }
     },
     "license": "MIT",
@@ -18,6 +18,9 @@
         {
             "name": "Robert Reinhard",
             "email": "info@bukwild.com"
-        }
+        },{
+	   "name": "Fernando Dorantes",
+	   "email": "fedormon@gmail.com"
+	}
     ]
 }
