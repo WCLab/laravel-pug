@@ -1,8 +1,8 @@
 <?php namespace Dorantes\LaravelPug;
 
 // Dependencies
-use Pug\Pug;
 use Illuminate\View\Engines\CompilerEngine;
+use Pug\Pug;
 
 class ServiceProvider extends \Illuminate\Support\ServiceProvider {
 
