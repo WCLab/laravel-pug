@@ -10,7 +10,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Dts\\LaravelPug\\": "src/"
+            "Dorantes\\LaravelPug\\": "src/"
         }
     },
     "license": "MIT",
@@ -19,8 +19,8 @@
             "name": "Robert Reinhard",
             "email": "info@bukwild.com"
         },{
-	   "name": "Fernando Dorantes",
-	   "email": "fedormon@gmail.com"
-	}
+            "name": "Fernando Dorantes",
+            "email": "fedormon@gmail.com"
+        }
     ]
 }
