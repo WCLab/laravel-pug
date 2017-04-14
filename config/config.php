@@ -6,7 +6,7 @@
 	 */
 
 	// Required for extending layouts
-	'basedir' => 			app_path().'views'
+	'basedir' => 			app_path().'/views'
 
 	// 'cache'              => null,
 	// 'stream'             => null,
